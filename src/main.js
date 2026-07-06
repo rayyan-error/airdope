@@ -29,6 +29,8 @@ scene.add(cube);
 
 cube.rotation.y = Math.PI / 4;
 
+const clock = new THREE.Clock();
+
 const light = new THREE.DirectionalLight(0xffffff, 3);
 
 light.position.set(5, 5, 5);
@@ -38,4 +40,15 @@ scene.add(light);
 camera.position.z = 5;
 
 function animate() {
+  requestAnimationFrame(animate);
+
+  const delta = clock.getDelta();
+
+  const speed = 0.2;
+
+  cube.rotation.y += speed * delta;
+
+  renderer.render(scene, camera);
 }
+
+animate();
