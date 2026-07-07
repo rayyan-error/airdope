@@ -29,7 +29,9 @@ document.body.appendChild(renderer.domElement);
 
 // Geometry
 const planeGeometry = new THREE.PlaneGeometry(10, 10);
-const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
+const cubeGeometry1 = new THREE.BoxGeometry(1, 1, 1);
+const cubeGeometry2 = new THREE.BoxGeometry(1, 1, 1);
+
 
 // Materials
 const red = new THREE.MeshStandardMaterial({ color: 0xff0000 });
@@ -37,11 +39,15 @@ const green = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
 
 // Meshes
 const ground = new THREE.Mesh(planeGeometry, red);
-const cube = new THREE.Mesh(cubeGeometry, green);
+const cube1 = new THREE.Mesh(cubeGeometry1, green);
+const cube2 = new THREE.Mesh(cubeGeometry2, green);
 scene.add(ground);
-scene.add(cube);
+scene.add(cube1);
+scene.add(cube2);
 ground.rotation.x = -Math.PI / 2;
-cube.position.y = 0.5;
+cube1.position.y = 0.5;
+cube2.position.y = 0.5;
+cube2.position.x = 2
 
 // Clock
 const clock = new THREE.Clock();
@@ -60,7 +66,8 @@ camera.position.z = 5;
 // Shadows
 renderer.shadowMap.enabled = true;
 light.castShadow = true;
-cube.castShadow = true;
+cube1.castShadow = true;
+cube2.castShadow = true;
 ground.receiveShadow = true;
 
 // Animate
@@ -69,6 +76,9 @@ function animate() {
 
   const delta = clock.getDelta();
   controls.update();
+
+  cube2.rotation.z += delta;
+
   renderer.render(scene, camera);
 }
 
