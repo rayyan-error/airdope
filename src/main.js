@@ -1,7 +1,8 @@
 // Importing whats needed to create a 3D scene and render it to the screen. This includes the Three.js library and a CSS file for styling.
 
 import './style.css';
-import * as THREE from 'three'; 
+import * as THREE from 'three';
+import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls.js';
 
 // Creates an empty 3D world (scene) that will hold every object, light, and camera in our application.
 const scene = new THREE.Scene();
@@ -22,20 +23,28 @@ renderer.setSize(window.innerWidth, window.innerHeight);
 
 document.body.appendChild(renderer.domElement)
 
-// added a cube geometry
-const geometry = new THREE.BoxGeometry(5,1,2);
+// added a plane geometry
+const planeGeometry = new THREE.PlaneGeometry(10,10);
+
+//add a new cube geometry
+
+const cubeGeometry = new THREE.BoxGeometry(1, 1, 1);
 
 //added a material
-const material = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+const red = new THREE.MeshStandardMaterial({ color: 0xff0000 });
+const green = new THREE.MeshStandardMaterial({ color: 0x00ff00 });
 
 //added the geometry and material to the cube mesh
-const cube = new THREE.Mesh(geometry, material);
+const ground = new THREE.Mesh(planeGeometry, red);
+const cube = new THREE.Mesh(cubeGeometry, green);
 
-// add the cube to the scene to be rendered
+// add the ground to the scene to be rendered
+scene.add(ground);
 scene.add(cube);
 
+cube.position.y = 0.5;
 //rotate it a lil bit
-cube.rotation.y = Math.PI / 4;
+ground.rotation.x = -Math.PI / 2;
 
 // created a clock for the delta thingy
 const clock = new THREE.Clock();
@@ -52,6 +61,17 @@ scene.add(light);
 //diff camera position so its not sitting insdie the cube
 camera.position.z = 5;
 
+// make an orbit control
+
+const controls = new OrbitControls(camera, renderer.domElement);
+
+renderer.shadowMap.enabled = true;
+
+light.castShadow = true;
+
+cube.castShadow = true;
+
+ground.receiveShadow = true;
 
 //ANIMATE FUNCTION
 function animate() {
@@ -65,8 +85,7 @@ function animate() {
   // set the speed of the rotation
   const speed = 0.2;
 
-  // rotate the cube based on speed and delta
-  cube.rotation.y += speed * delta;
+  controls.update();
 
   // render the scene
   renderer.render(scene, camera);
